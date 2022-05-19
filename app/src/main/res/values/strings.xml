@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Mafia_Demo</string>
+    <string name="textOr">або</string>
+    <string name="textJoin">Приєднатися</string>
+    <string name="textCreat">Створити кімнату</string>
+    <string name="textFooter">Розроблено студентами ФОТІУС, ЧНУ 2022 рік</string>
+    <string name="textCloseLobby">Розпустити кімнату</string>
+    <string name="textStartGame">Почати гру</string>
+    <string name="textLeave">Покинути кімнату</string>
 </resources>

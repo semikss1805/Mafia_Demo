@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="180dp"
+        android:layout_height="185dp"
+        android:layout_marginTop="272dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonStartGame"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="100dp"
+        android:text="@string/textStartGame"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonCloseLobby"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="50dp"
+        android:backgroundTint="#AE2D2D"
+        android:text="@string/textCloseLobby"
+        android:textAllCaps="false"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonStartGame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="200dp"
+        android:gravity="center_vertical"
+        android:text="12345"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageButton
+        android:id="@+id/buttonCopy"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/white"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="?attr/actionModeCopyDrawable"
+        app:tint="@color/black" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="4dp"
+        android:backgroundTint="@color/white"
+        app:layout_constraintEnd_toStartOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="?attr/actionModeShareDrawable"
+        app:tint="@color/black" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
