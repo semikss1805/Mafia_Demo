@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_application"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/adminLobbyFragment"
+        android:name="com.example.mafia_demo.screens.AdminLobbyFragment"
+        android:label="AdminLobbyFragment" >
+        <action
+            android:id="@+id/action_adminLobbyFragment_to_homePageFragment"
+            app:destination="@id/homePageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/homePageFragment"
+        android:name="com.example.mafia_demo.screens.HomePageFragment"
+        android:label="HomePageFragment" >
+        <action
+            android:id="@+id/action_homePageFragment_to_adminLobbyFragment"
+            app:destination="@id/adminLobbyFragment" />
+        <action
+            android:id="@+id/action_homePageFragment_to_userLobbyFragment"
+            app:destination="@id/userLobbyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.mafia_demo.screens.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_homePageFragment"
+            app:destination="@id/homePageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userLobbyFragment"
+        android:name="com.example.mafia_demo.screens.UserLobbyFragment"
+        android:label="UserLobbyFragment" >
+        <action
+            android:id="@+id/action_userLobbyFragment_to_homePageFragment"
+            app:destination="@id/homePageFragment" />
+    </fragment>
+</navigation>

@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/nav_graph_application"
+        tools:layout_editor_absoluteX="201dp" />
+
     <TextView
         android:id="@+id/footer"
         android:layout_width="0dp"
@@ -18,11 +28,4 @@
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView"
-        android:name="com.example.mafia_demo.screens.HomePageFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="201dp"
-        tools:layout_editor_absoluteY="293dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

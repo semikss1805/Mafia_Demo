@@ -16,21 +16,22 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonCloseLobby"
+        android:id="@+id/buttonLeave"
         android:layout_width="200dp"
         android:layout_height="40dp"
+        android:layout_marginBottom="190dp"
         android:backgroundTint="#AE2D2D"
         android:text="@string/textLeave"
         android:textAllCaps="false"
         android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="501dp" />
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="200dp"
+        android:layout_width="160dp"
         android:layout_height="40dp"
         android:layout_marginBottom="200dp"
         android:gravity="center_vertical"
@@ -46,13 +47,13 @@
         android:layout_height="40dp"
         android:layout_marginTop="32dp"
         android:backgroundTint="@color/white"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton2"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonShare"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="?attr/actionModeCopyDrawable"
         app:tint="@color/black" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/imageButtonShare"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="32dp"
