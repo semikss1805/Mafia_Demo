@@ -10,10 +10,12 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.mafia_demo.MainActivity
 import com.example.mafia_demo.R
 import com.example.mafia_demo.databinding.FragmentHomepageBinding
 import com.example.mafia_demo.remote.*
+import com.example.mafia_demo.remote.request.ConnectRequest
+import com.example.mafia_demo.remote.request.LobbyCreateRequest
+import com.example.mafia_demo.remote.response.LobbyResponse
 import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -39,73 +41,108 @@ class HomePageFragment : Fragment(R.layout.fragment_homepage) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonCreate.setOnClickListener {
-            val name = arguments?.getString(MainActivity.nicknameKey)
-            val lobbyName = arguments?.getString(MainActivity.nicknameKey) + "`s lobby"
-
-            val mafiaApi = MafiaApi.create()
-            val lobbyCreateRequest = LobbyCreateRequest(lobbyName, name)
-
-            mafiaApi.createLobby(lobbyCreateRequest).enqueue(object : Callback<LobbyResponse> {
-                override fun onResponse(
-                    call: Call<LobbyResponse>,
-                    response: Response<LobbyResponse>
-                ) {
-                    Log.i("LobbyCreated", response.body().toString())
-
-                    if (response.body() != null) {
-                        viewLifecycleOwner.lifecycleScope.launch {
-                            findNavController().navigate(R.id.action_homePageFragment_to_adminLobbyFragment)
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<LobbyResponse>, t: Throwable) {
-                    Log.e("Error", "NetworkError", t)
-                }
-
-            })
+            createLobby()
         }
 
         binding.buttonJoin.setOnClickListener {
-            val lobbyNumber = binding.CodeInput.text.toString()
-
-            val mafiaApi = MafiaApi.create()
-            val connectRequest = ConnectRequest(arguments?.getString(MainActivity.nicknameKey))
-
-            mafiaApi.connectPlayerToLobby(lobbyNumber, connectRequest)
-                .enqueue(object : Callback<Player> {
-
-                    override fun onResponse(call: Call<Player>, response: Response<Player>) {
-                        Log.i("AddedPlayer", response.body().toString())
-
-                        if (response.body() != null)
-                            viewLifecycleOwner.lifecycleScope.launch {
-                                val id = response.body()?.id
-
-                                findNavController().navigate(
-                                    R.id.action_homePageFragment_to_userLobbyFragment,
-                                    bundleOf(
-                                        UserLobbyFragment.numberKey to lobbyNumber,
-                                        UserLobbyFragment.playerIdKey to id
-                                    )
-                                )
-                            }
-                        else
-                            viewLifecycleOwner.lifecycleScope.launch {
-                                val text = "ПОМИЛКОВИЙ НОМЕР КІМНАТИ"
-                                Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
-                            }
-
-
-                    }
-
-                    override fun onFailure(call: Call<Player>, t: Throwable) {
-                        Log.e("Error", "NetworkError", t)
-                    }
-
-                })
-
+            joinLobby()
         }
 
+        binding.nicknameTextView.text = arguments?.getString(nicknameKey)
+
+        binding.editNicknameImageButton.setOnClickListener {
+            findNavController().navigate(R.id.action_homePageFragment_to_loginFragment)
+        }
+    }
+
+    private fun createLobby() {
+        val name = arguments?.getString(nicknameKey)
+        val lobbyName = arguments?.getString(nicknameKey) + "`s lobby"
+
+        val mafiaApi = MafiaApi.create()
+        val lobbyCreateRequest = LobbyCreateRequest(lobbyName, name)
+
+        mafiaApi.createLobby(lobbyCreateRequest).enqueue(object : Callback<LobbyResponse> {
+            override fun onResponse(
+                call: Call<LobbyResponse>,
+                response: Response<LobbyResponse>
+            ) {
+                Log.i("LobbyCreated", response.body().toString())
+
+                if (response.body() != null) {
+                    val lobbyNumber = response.body()?.number.toString()
+                    val lobbyId = response.body()?.id.toString()
+
+                    viewLifecycleOwner.lifecycleScope.launch {
+
+                        findNavController().navigate(
+                            R.id.action_homePageFragment_to_adminLobbyFragment,
+                            bundleOf(
+                                AdminLobbyFragment.numberKey to lobbyNumber,
+                                AdminLobbyFragment.lobbyIdKey to lobbyId,
+                                AdminLobbyFragment.nicknameKey to arguments?.getString(
+                                    nicknameKey
+                                )
+                            )
+                        )
+
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<LobbyResponse>, t: Throwable) {
+                Log.e("Error", "NetworkError", t)
+            }
+
+        })
+    }
+
+    private fun joinLobby() {
+        val lobbyNumber = binding.CodeInput.text.toString()
+
+        val mafiaApi = MafiaApi.create()
+        val connectRequest = ConnectRequest(arguments?.getString(nicknameKey))
+
+        mafiaApi.connectPlayerToLobby(lobbyNumber, connectRequest)
+            .enqueue(object : Callback<PlayerResponse> {
+
+                override fun onResponse(
+                    call: Call<PlayerResponse>,
+                    response: Response<PlayerResponse>
+                ) {
+                    Log.i("AddedPlayer", response.body().toString())
+
+                    if (response.body() != null)
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            val id = response.body()?.id
+
+                            findNavController().navigate(
+                                R.id.action_homePageFragment_to_userLobbyFragment,
+                                bundleOf(
+                                    UserLobbyFragment.numberKey to lobbyNumber,
+                                    UserLobbyFragment.playerIdKey to id,
+                                    UserLobbyFragment.nicknameKey to arguments?.getString(
+                                        nicknameKey
+                                    )
+                                )
+                            )
+                        }
+                    else
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            val text = "ПОМИЛКОВИЙ НОМЕР КІМНАТИ"
+                            Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+                        }
+
+
+                }
+
+                override fun onFailure(call: Call<PlayerResponse>, t: Throwable) {
+                    Log.e("Error", "NetworkError", t)
+                }
+            })
+    }
+
+    companion object {
+        const val nicknameKey = "Player"
     }
 }

@@ -37,7 +37,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 val nickname = binding.editTextNickname.text.toString()
                 findNavController().navigate(
                     R.id.action_loginFragment_to_homePageFragment,
-                    bundleOf(MainActivity.nicknameKey to nickname)
+                    bundleOf(HomePageFragment.nicknameKey to nickname)
                 )
             }
 

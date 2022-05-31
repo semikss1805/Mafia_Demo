@@ -1,4 +1,4 @@
-package com.example.mafia_demo.remote
+package com.example.mafia_demo.remote.request
 
 import com.google.gson.annotations.SerializedName
 
