@@ -7,4 +7,5 @@
     <string name="textCloseLobby">Розпустити кімнату</string>
     <string name="textStartGame">Почати гру</string>
     <string name="textLeave">Покинути кімнату</string>
+    <string name="LobbyCodeText">12345</string>
 </resources>

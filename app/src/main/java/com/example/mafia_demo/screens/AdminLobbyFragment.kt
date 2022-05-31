@@ -28,7 +28,7 @@ class AdminLobbyFragment: Fragment(R.layout.fragment_admin_lobby) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonCloseLobby.setOnClickListener {
-            findNavController().navigate(R.id.action_adminLobbyFragment_to_homePageFragment)
+            findNavController().navigate(R.id.action_adminLobbyFragment_to_loginFragment)
         }
     }
 }

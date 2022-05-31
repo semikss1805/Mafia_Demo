@@ -30,12 +30,12 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/lobbyCode"
         android:layout_width="160dp"
         android:layout_height="40dp"
         android:layout_marginBottom="200dp"
         android:gravity="center_vertical"
-        android:text="12345"
+        android:text="@string/LobbyCodeText"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/recyclerView"
@@ -59,7 +59,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="4dp"
         android:backgroundTint="@color/white"
-        app:layout_constraintEnd_toStartOf="@+id/textView"
+        app:layout_constraintEnd_toStartOf="@+id/lobbyCode"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="?attr/actionModeShareDrawable"
         app:tint="@color/black" />

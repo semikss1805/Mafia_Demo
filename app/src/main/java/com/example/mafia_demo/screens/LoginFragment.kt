@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.mafia_demo.MainActivity
 import com.example.mafia_demo.R
 import com.example.mafia_demo.databinding.FragmentLoginBinding
 
@@ -29,8 +32,19 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonSetNickname.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_homePageFragment)
+
+            if (binding.editTextNickname.text.length > 3){
+                val nickname = binding.editTextNickname.text.toString()
+                findNavController().navigate(
+                    R.id.action_loginFragment_to_homePageFragment,
+                    bundleOf(MainActivity.nicknameKey to nickname)
+                )
+            }
+
+            else {
+                val text = "ВВЕДІТЬ ІНШИЙ НІКНЕЙМ"
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+            }
         }
     }
-
 }

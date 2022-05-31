@@ -9,8 +9,8 @@
         android:name="com.example.mafia_demo.screens.AdminLobbyFragment"
         android:label="AdminLobbyFragment" >
         <action
-            android:id="@+id/action_adminLobbyFragment_to_homePageFragment"
-            app:destination="@id/homePageFragment" />
+            android:id="@+id/action_adminLobbyFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/homePageFragment"
@@ -36,7 +36,7 @@
         android:name="com.example.mafia_demo.screens.UserLobbyFragment"
         android:label="UserLobbyFragment" >
         <action
-            android:id="@+id/action_userLobbyFragment_to_homePageFragment"
-            app:destination="@id/homePageFragment" />
+            android:id="@+id/action_userLobbyFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 </navigation>
