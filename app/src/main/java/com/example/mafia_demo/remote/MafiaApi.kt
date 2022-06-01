@@ -13,7 +13,7 @@ import retrofit2.http.*
 interface MafiaApi {
 
     @GET("v1/lobby/{lobbyNumber}/players")
-    fun getLobbyPlayers(@Path("lobbyNumber") lobbyNumber: String): Call<List<PlayerResponse>>
+    fun getLobbyPlayers(@Path("lobbyNumber") lobbyNumber: String?): Call<List<PlayerResponse>>
 
     @POST("v1/lobby")
     fun createLobby(@Body lobbyRequest: LobbyCreateRequest): Call<LobbyResponse>

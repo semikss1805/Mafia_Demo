@@ -7,13 +7,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="180dp"
-        android:layout_height="185dp"
-        android:layout_marginTop="272dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonLeave"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/buttonLeave"
@@ -31,15 +31,16 @@
 
     <TextView
         android:id="@+id/lobbyCode"
-        android:layout_width="160dp"
+        android:layout_width="80dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="200dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="12dp"
         android:gravity="center_vertical"
         android:text="@string/LobbyCodeText"
         android:textSize="20dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/buttonCopy"

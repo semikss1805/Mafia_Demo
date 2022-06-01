@@ -12,15 +12,26 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mafia_demo.R
+import com.example.mafia_demo.UserActionListener
+import com.example.mafia_demo.UsersAdapter
+import com.example.mafia_demo.UsersForAdminAdapter
 import com.example.mafia_demo.databinding.FragmentAdminLobbyBinding
 import com.example.mafia_demo.remote.MafiaApi
+import com.example.mafia_demo.remote.PlayerResponse
 import com.example.mafia_demo.remote.response.DeleteLobbyResponse
+import com.example.mafia_demo.remote.response.DeletePlayerResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 class AdminLobbyFragment : Fragment(R.layout.fragment_admin_lobby) {
+    private lateinit var adapter: UsersForAdminAdapter
+
     private var _binding: FragmentAdminLobbyBinding? = null
 
     private val binding get() = _binding!!
@@ -38,9 +49,15 @@ class AdminLobbyFragment : Fragment(R.layout.fragment_admin_lobby) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val executorService = Executors.newSingleThreadScheduledExecutor()
+        executorService.scheduleAtFixedRate({
+            updateLobby()
+        }, 0, 1, TimeUnit.SECONDS)
+
         binding.textView.text = arguments?.getString(numberKey)
 
         binding.buttonCloseLobby.setOnClickListener {
+            executorService.shutdown()
             closeLobby()
         }
 
@@ -49,7 +66,58 @@ class AdminLobbyFragment : Fragment(R.layout.fragment_admin_lobby) {
         }
     }
 
-    private fun closeLobby(){
+    private fun deletePlayer(user: PlayerResponse, mafiaApi: MafiaApi) {
+        mafiaApi.deletePlayerInLobby(user.id).enqueue(object : Callback<DeletePlayerResponse> {
+            override fun onResponse(
+                call: Call<DeletePlayerResponse>,
+                response: Response<DeletePlayerResponse>
+            ) {
+                Toast.makeText(
+                    context,
+                    "user:${user.name} deleted",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            override fun onFailure(
+                call: Call<DeletePlayerResponse>,
+                t: Throwable
+            ) {
+                Log.e("Error", "NetworkError", t)
+            }
+        })
+    }
+
+    private fun updateLobby() {
+        val mafiaApi = MafiaApi.create()
+        mafiaApi.getLobbyPlayers(arguments?.getString(UserLobbyFragment.numberKey))
+            .enqueue(object : Callback<List<PlayerResponse>> {
+                override fun onResponse(
+                    call: Call<List<PlayerResponse>>,
+                    response: Response<List<PlayerResponse>>
+                ) {
+
+                    adapter = UsersForAdminAdapter(object : UserActionListener {
+                        override fun onUserDelete(user: PlayerResponse) {
+                            deletePlayer(user, mafiaApi)
+                        }
+                    })
+
+                    adapter.users = response.body()!!
+                    val layoutManager = LinearLayoutManager(context)
+                    binding.recyclerView.layoutManager = layoutManager
+                    binding.recyclerView.adapter = adapter
+                    Log.i("players", "find")
+                }
+
+                override fun onFailure(call: Call<List<PlayerResponse>>, t: Throwable) {
+                    Log.e("Error", "NetworkError", t)
+                }
+
+            })
+    }
+
+    private fun closeLobby() {
         val lobbyId = arguments?.getString(lobbyIdKey)
         val mafiaApi = MafiaApi.create()
 
@@ -71,14 +139,21 @@ class AdminLobbyFragment : Fragment(R.layout.fragment_admin_lobby) {
             R.id.action_adminLobbyFragment_to_homePageFragment,
             bundleOf(HomePageFragment.nicknameKey to arguments?.getString(nicknameKey))
         )
+
     }
 
-    private fun copyToClipboard(textToCopy: String){
-        val clipboardManager: ClipboardManager = activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    private fun copyToClipboard(textToCopy: String) {
+        val clipboardManager: ClipboardManager =
+            activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData = ClipData.newPlainText("text", textToCopy)
         clipboardManager.setPrimaryClip(clipData)
 
         Toast.makeText(context, "Code copied to clipboard", Toast.LENGTH_LONG).show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        adapter.users = emptyList()
     }
 
     companion object {
