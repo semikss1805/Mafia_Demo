@@ -1,7 +1,6 @@
 package com.example.mafia_demo.screens
 
 import android.content.ClipboardManager
-import android.content.Context
 import android.content.ClipData
 import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
@@ -9,23 +8,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.annotation.MainThread
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mafia_demo.R
-import com.example.mafia_demo.UsersAdapter
+import com.example.mafia_demo.adapters.UsersAdapter
 import com.example.mafia_demo.databinding.FragmentUserLobbyBinding
 import com.example.mafia_demo.remote.response.DeletePlayerResponse
 import com.example.mafia_demo.remote.MafiaApi
 import com.example.mafia_demo.remote.PlayerResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
+import com.example.mafia_demo.remote.response.LobbyResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -95,7 +89,6 @@ class UserLobbyFragment : Fragment(R.layout.fragment_user_lobby) {
 
     private fun updateLobby() {
         val mafiaApi = MafiaApi.create()
-        var prevResponse: List<PlayerResponse> = listOf(PlayerResponse(1, "1", false, 1))
         mafiaApi.getLobbyPlayers(arguments?.getString(numberKey))
             .enqueue(object : Callback<List<PlayerResponse>> {
                 override fun onResponse(
@@ -106,7 +99,8 @@ class UserLobbyFragment : Fragment(R.layout.fragment_user_lobby) {
                         if (!isInLobby(response.body()!!)) {
                             executorService.shutdown()
                             leaveLobby()
-                            Toast.makeText(context, "Ви були виключені з лоббі", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Ви були виключені з лоббі", Toast.LENGTH_SHORT)
+                                .show()
                         }
 
                         adapter = UsersAdapter()
@@ -114,11 +108,14 @@ class UserLobbyFragment : Fragment(R.layout.fragment_user_lobby) {
                         val layoutManager = LinearLayoutManager(context)
                         binding.recyclerView.layoutManager = layoutManager
                         binding.recyclerView.adapter = adapter
-                    }
-                    else{
+                    } else {
                         findNavController().navigate(
                             R.id.action_userLobbyFragment_to_homePageFragment,
-                            bundleOf(HomePageFragment.nicknameKey to arguments?.getString(nicknameKey))
+                            bundleOf(
+                                HomePageFragment.nicknameKey to arguments?.getString(
+                                    nicknameKey
+                                )
+                            )
                         )
                         Toast.makeText(context, "Лоббі розпущено", Toast.LENGTH_SHORT).show()
                         executorService.shutdown()
@@ -130,6 +127,39 @@ class UserLobbyFragment : Fragment(R.layout.fragment_user_lobby) {
                 }
 
             })
+
+        isGameStarted(mafiaApi)
+    }
+
+    private fun isGameStarted(mafiaApi: MafiaApi) {
+        mafiaApi.getLobby(arguments?.getString(numberKey)).enqueue(object : Callback<LobbyResponse>{
+            override fun onResponse(call: Call<LobbyResponse>, response: Response<LobbyResponse>) {
+                if (response.body()?.gameStatus == "IN_PROGRESS"){
+                    var role = ""
+                    var position = 0
+                    for (player in response.body()!!.players){
+                        if (arguments?.getInt(playerIdKey) == player.id) {
+                            role = player.role
+                            position = player.position
+                        }
+                    }
+                    findNavController().navigate(R.id.action_userLobbyFragment_to_gameFragment,
+                        bundleOf(
+                            GameFragment.playerIdKey to arguments?.getInt(playerIdKey),
+                            GameFragment.numberKey to arguments?.getString(numberKey),
+                            GameFragment.nicknameKey to arguments?.getString(nicknameKey),
+                            GameFragment.roleKey to role,
+                            GameFragment.positionKey to position
+                        ))
+                    executorService.shutdown()
+                    Log.i("GameStatus","GameStarted\n" + response.body().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<LobbyResponse>, t: Throwable) {
+                Log.e("Error", "NetworkError", t)
+            }
+        })
     }
 
     private fun isInLobby(users: List<PlayerResponse>): Boolean {

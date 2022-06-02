@@ -72,6 +72,7 @@ class HomePageFragment : Fragment(R.layout.fragment_homepage) {
                 if (response.body() != null) {
                     val lobbyNumber = response.body()?.number.toString()
                     val lobbyId = response.body()?.id.toString()
+                    val id = response.body()!!.players[0].id
 
                     viewLifecycleOwner.lifecycleScope.launch {
 
@@ -80,6 +81,7 @@ class HomePageFragment : Fragment(R.layout.fragment_homepage) {
                             bundleOf(
                                 AdminLobbyFragment.numberKey to lobbyNumber,
                                 AdminLobbyFragment.lobbyIdKey to lobbyId,
+                                AdminLobbyFragment.playerIdKey to id,
                                 AdminLobbyFragment.nicknameKey to arguments?.getString(
                                     nicknameKey
                                 )

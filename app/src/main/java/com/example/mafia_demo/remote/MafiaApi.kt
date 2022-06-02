@@ -4,6 +4,7 @@ import com.example.mafia_demo.remote.request.ConnectRequest
 import com.example.mafia_demo.remote.request.LobbyCreateRequest
 import com.example.mafia_demo.remote.response.DeleteLobbyResponse
 import com.example.mafia_demo.remote.response.DeletePlayerResponse
+import com.example.mafia_demo.remote.response.GameStatusResponse
 import com.example.mafia_demo.remote.response.LobbyResponse
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -14,6 +15,12 @@ interface MafiaApi {
 
     @GET("v1/lobby/{lobbyNumber}/players")
     fun getLobbyPlayers(@Path("lobbyNumber") lobbyNumber: String?): Call<List<PlayerResponse>>
+
+    @GET("v1/lobby/{lobbyNumber}}/mafia_game")
+    fun getGameStatus(@Path("lobbyNumber") lobbyNumber: String?): Call<GameStatusResponse>
+
+    @GET("v1/lobby")
+    fun getLobby(@Query("number") number: String?): Call<LobbyResponse>
 
     @POST("v1/lobby")
     fun createLobby(@Body lobbyRequest: LobbyCreateRequest): Call<LobbyResponse>
@@ -29,6 +36,9 @@ interface MafiaApi {
 
     @DELETE("v1/lobby")
     fun deleteLobbyById(@Query("id") id: String?): Call<DeleteLobbyResponse>
+
+    @PUT("v1/lobby/{lobbyNumber}/mafia_game")
+    fun startGame(@Path("lobbyNumber") lobbyNumber: String?): Call<LobbyResponse>
 
     companion object {
 

@@ -7,5 +7,5 @@ data class LobbyResponse(
     @SerializedName("id") val id: Int,
     @SerializedName("number") val number: Int,
     @SerializedName("players") val players: List<PlayerResponse>,
-
+    @SerializedName("gameStatus") val gameStatus: String
     )

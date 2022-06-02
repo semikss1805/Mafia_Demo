@@ -8,4 +8,5 @@
     <string name="textStartGame">Почати гру</string>
     <string name="textLeave">Покинути кімнату</string>
     <string name="LobbyCodeText">12345</string>
+    <string name="role">Role</string>
 </resources>

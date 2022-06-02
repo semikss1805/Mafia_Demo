@@ -1,11 +1,11 @@
-package com.example.mafia_demo
+package com.example.mafia_demo.adapters
 
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mafia_demo.databinding.ItemUserBinding
+import com.example.mafia_demo.R
 import com.example.mafia_demo.databinding.ItemUserForAdminBinding
 import com.example.mafia_demo.remote.PlayerResponse
 

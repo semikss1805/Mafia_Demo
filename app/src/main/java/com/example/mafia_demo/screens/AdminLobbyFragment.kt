@@ -14,18 +14,17 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mafia_demo.R
-import com.example.mafia_demo.UserActionListener
-import com.example.mafia_demo.UsersAdapter
-import com.example.mafia_demo.UsersForAdminAdapter
+import com.example.mafia_demo.adapters.UserActionListener
+import com.example.mafia_demo.adapters.UsersForAdminAdapter
 import com.example.mafia_demo.databinding.FragmentAdminLobbyBinding
 import com.example.mafia_demo.remote.MafiaApi
 import com.example.mafia_demo.remote.PlayerResponse
 import com.example.mafia_demo.remote.response.DeleteLobbyResponse
 import com.example.mafia_demo.remote.response.DeletePlayerResponse
+import com.example.mafia_demo.remote.response.LobbyResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -64,6 +63,11 @@ class AdminLobbyFragment : Fragment(R.layout.fragment_admin_lobby) {
         binding.buttonCopy.setOnClickListener {
             copyToClipboard(binding.textView.text.toString())
         }
+
+        binding.buttonStartGame.setOnClickListener {
+            startGame()
+            executorService.shutdown()
+        }
     }
 
     private fun deletePlayer(user: PlayerResponse, mafiaApi: MafiaApi) {
@@ -83,6 +87,32 @@ class AdminLobbyFragment : Fragment(R.layout.fragment_admin_lobby) {
                 call: Call<DeletePlayerResponse>,
                 t: Throwable
             ) {
+                Log.e("Error", "NetworkError", t)
+            }
+        })
+    }
+
+    private fun startGame(){
+        val mafiaApi = MafiaApi.create()
+        mafiaApi.startGame(arguments?.getString(numberKey)).enqueue(object : Callback<LobbyResponse>{
+            override fun onResponse(call: Call<LobbyResponse>, response: Response<LobbyResponse>) {
+                if (response.body() == null){
+                    Toast.makeText(context, "Потрібно більше гравців", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    Log.i("gameStatus","gameStarted\n" + response.body().toString())
+                    findNavController().navigate(R.id.action_adminLobbyFragment_to_gameFragment,
+                        bundleOf(
+                            GameFragment.nicknameKey to arguments?.getString(nicknameKey),
+                            GameFragment.numberKey to arguments?.getString(numberKey),
+                            GameFragment.playerIdKey to arguments?.getInt(playerIdKey),
+                            GameFragment.roleKey to response.body()!!.players[0].role,
+                            GameFragment.positionKey to response.body()!!.players[0].position
+                        ))
+                }
+            }
+
+            override fun onFailure(call: Call<LobbyResponse>, t: Throwable) {
                 Log.e("Error", "NetworkError", t)
             }
         })
@@ -151,14 +181,11 @@ class AdminLobbyFragment : Fragment(R.layout.fragment_admin_lobby) {
         Toast.makeText(context, "Code copied to clipboard", Toast.LENGTH_LONG).show()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        adapter.users = emptyList()
-    }
 
     companion object {
         const val numberKey = "123456"
         const val nicknameKey = "Player"
         const val lobbyIdKey = "0"
+        const val playerIdKey = "0"
     }
 }

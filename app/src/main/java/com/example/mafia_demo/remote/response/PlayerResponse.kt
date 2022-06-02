@@ -6,6 +6,8 @@ import java.util.*
 data class PlayerResponse(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
+    @SerializedName("role") val role: String,
+    @SerializedName("position") val  position: Int,
     @SerializedName("admin") val admin: Boolean,
-    @SerializedName("lobbyId") val lobbyId: Int,
+    @SerializedName("lobbyId") val lobbyId: Int
 )

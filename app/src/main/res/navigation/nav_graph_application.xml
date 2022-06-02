@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_adminLobbyFragment_to_homePageFragment"
             app:destination="@id/homePageFragment" />
+        <action
+            android:id="@+id/action_adminLobbyFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
     </fragment>
     <fragment
         android:id="@+id/homePageFragment"
@@ -41,5 +44,12 @@
         <action
             android:id="@+id/action_userLobbyFragment_to_homePageFragment"
             app:destination="@id/homePageFragment" />
+        <action
+            android:id="@+id/action_userLobbyFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="com.example.mafia_demo.screens.GameFragment"
+        android:label="GameFragment" />
 </navigation>
