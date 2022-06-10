@@ -74,7 +74,7 @@ class HomePageFragment : Fragment(R.layout.fragment_homepage) {
                     val lobbyId = response.body()?.id.toString()
                     val id = response.body()!!.players[0].id
 
-                    viewLifecycleOwner.lifecycleScope.launch {
+                    viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
 
                         findNavController().navigate(
                             R.id.action_homePageFragment_to_adminLobbyFragment,
@@ -115,7 +115,7 @@ class HomePageFragment : Fragment(R.layout.fragment_homepage) {
                     Log.i("AddedPlayer", response.body().toString())
 
                     if (response.body() != null)
-                        viewLifecycleOwner.lifecycleScope.launch {
+                        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                             val id = response.body()?.id
 
                             findNavController().navigate(

@@ -51,5 +51,9 @@
     <fragment
         android:id="@+id/gameFragment"
         android:name="com.example.mafia_demo.screens.GameFragment"
-        android:label="GameFragment" />
+        android:label="GameFragment" >
+        <action
+            android:id="@+id/action_gameFragment_to_homePageFragment"
+            app:destination="@id/homePageFragment" />
+    </fragment>
 </navigation>

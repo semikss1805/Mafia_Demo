@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mafia_Demo</string>
+    <string name="app_name">Mafia</string>
     <string name="textOr">або</string>
     <string name="textJoin">Приєднатися</string>
     <string name="textCreat">Створити кімнату</string>

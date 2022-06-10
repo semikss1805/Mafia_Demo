@@ -33,7 +33,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         binding.buttonSetNickname.setOnClickListener {
 
-            if (binding.editTextNickname.text.length > 3){
+            if (binding.editTextNickname.text.length >= 3){
                 val nickname = binding.editTextNickname.text.toString()
                 findNavController().navigate(
                     R.id.action_loginFragment_to_homePageFragment,

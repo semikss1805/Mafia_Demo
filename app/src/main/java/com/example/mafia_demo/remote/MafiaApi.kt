@@ -2,10 +2,7 @@ package com.example.mafia_demo.remote
 
 import com.example.mafia_demo.remote.request.ConnectRequest
 import com.example.mafia_demo.remote.request.LobbyCreateRequest
-import com.example.mafia_demo.remote.response.DeleteLobbyResponse
-import com.example.mafia_demo.remote.response.DeletePlayerResponse
-import com.example.mafia_demo.remote.response.GameStatusResponse
-import com.example.mafia_demo.remote.response.LobbyResponse
+import com.example.mafia_demo.remote.response.*
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,7 +13,7 @@ interface MafiaApi {
     @GET("v1/lobby/{lobbyNumber}/players")
     fun getLobbyPlayers(@Path("lobbyNumber") lobbyNumber: String?): Call<List<PlayerResponse>>
 
-    @GET("v1/lobby/{lobbyNumber}}/mafia_game")
+    @GET("v1/lobby/{lobbyNumber}/mafia_game")
     fun getGameStatus(@Path("lobbyNumber") lobbyNumber: String?): Call<GameStatusResponse>
 
     @GET("v1/lobby")
@@ -30,6 +27,21 @@ interface MafiaApi {
         @Path("lobbyNumber") lobbyNumber: String,
         @Body connectRequest: ConnectRequest
     ): Call<PlayerResponse>
+
+    @POST("v1/lobby/{lobbyNumber}/speech")
+    fun speech(@Path("lobbyNumber") lobbyNumber: String?): Call<DefaultResponse>
+
+    @POST("v1/lobby/{lobbyNumber}/candidates")
+    fun vote(@Path("lobbyNumber") lobbyNumber: String?, @Query("player_position") player_position: Int?): Call<GameStatusResponse>
+
+    @POST("v1/lobby/{lobbyNumber}/mafia_turn")
+    fun mafiaTurn(@Path("lobbyNumber") lobbyNumber: String?, @Query("player_position") player_position: Int?): Call<GameStatusResponse>
+
+    @POST("v1/lobby/{lobbyNumber}/sheriff_turn")
+    fun sheriffTurn(@Path("lobbyNumber") lobbyNumber: String?, @Query("player_position") player_position: Int?): Call<GameStatusResponse>
+
+    @POST("v1/lobby/{lobbyNumber}/skip")
+    fun skip(@Path("lobbyNumber") lobbyNumber: String?): Call<DefaultResponse>
 
     @DELETE("v1/lobby/{playerId}")
     fun deletePlayerInLobby(@Path("playerId") playerId: Int?): Call<DeletePlayerResponse>
